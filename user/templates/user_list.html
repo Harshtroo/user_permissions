@@ -1,0 +1,42 @@
+<html>
+    <body>        
+        <table class="table">
+            {% if messages %}
+                {% for message in messages %}
+                    <ul class="alert {% if message.tags == 'error' %} alert-danger {% else %} alert-success{% endif %}" style="list-style-type: none">
+                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                        {{ message }}
+                        </li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">username</th>
+                <th scope="col">email</th>
+                <th scope="col">role</th>
+                <th scope="col">edit</th>
+                {% comment %} {% if request.user.has_access %} {% endcomment %}
+                <th scope="col">delete</th>
+                {% comment %} {% endif %} {% endcomment %}
+            </tr>
+        </thead>
+        {% for user_field in user %}
+            <tr>
+                <td>{{user_field.id}}</td>
+                <td>{{user_field.username}}</td>
+                <td>{{user_field.email}}</td>
+                <td>    
+                <form method="GET" action="/employee_edit/{{employee_detils.pk}}">
+                        <!-- {% csrf_token %} -->
+                        <button type="edit">Edit</button>
+                </form></td>
+                <td>    
+                    <form method="POST" action="/employee_edit/{{employee_detils.pk}}">
+                            <!-- {% csrf_token %} -->
+                            <button type="submit">Delete</button>
+                    </form></td>
+    </body>
+</html>

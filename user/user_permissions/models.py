@@ -11,11 +11,17 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    def soft_delete(self):
+        '''soft delete funcction'''
+        self.is_deleted= True
+        self.save()
+
+
 
 class Manufacturer(models.Model):
     ''' manufacturer model '''
-    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    create_by = models.ForeignKey("User", on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
-    update_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    update_at = models.DateTimeField(auto_now_add=True)
+    # update_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    # update_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField()
