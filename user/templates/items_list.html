@@ -14,21 +14,19 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">id</th>
-                <th scope="col">username</th>
-                <th scope="col">email</th>
-                <th scope="col">role</th>
+                <th scope="col">name</th>
+                <th scope="col">quantity</th>
                 <th scope="col">edit</th>
                 {% comment %} {% if request.user.has_access %} {% endcomment %}
                 <th scope="col">delete</th>
                 {% comment %} {% endif %} {% endcomment %}
             </tr>
         </thead>
-        {% for user_field in user %}
+        {% for item in items %}
             <tr>
-                <td>{{user_field.id}}</td>
-                <td>{{user_field.username}}</td>
-                <td>{{user_field.email}}</td>
-                <td>{% if user_field.role == 'A' %}Admin{% elif user_field.role == 'S' %}Supervisor{% endif %}</td>
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.quantity}}</td>
                 <td>
                 <form method="GET" action="/user_edit/{{user_field.pk}}">
                         <!-- {% csrf_token %} -->
@@ -40,6 +38,5 @@
                             <button type="submit">Delete</button>
                     </form></td>
         {% endfor %}
-        
     </body>
 </html>

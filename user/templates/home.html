@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <button type="login">Login</button>
+        <a href="{% url 'login' %}">
+        <button type="login">Login</button></a>
+
+        {% if request.user.is_authenticated and request.user.role == 'Admin' %}
+            <a href="{% url 'create_user' %}">
+            <button type="register" >Register</button></a>
+        {% else %}
         <a href="{% url 'create_user' %}">
-        <button type="register" >Register</button></a>
+            <button type="register" disabled>Register</button></a>
+        {% endif %}
+        <a href="{% url 'user_list' %}">
+        <button type="user list">User List</button></a>
+        
+        <a href="{% url 'add_items' %}">
+            <button type="user list">Add Items</button></a>
+        <a href="{% url 'items_list' %}">
+            <button type="user list">Items List</button></a>
     </body>
 </html>
