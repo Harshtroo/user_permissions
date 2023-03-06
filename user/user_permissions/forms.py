@@ -14,15 +14,14 @@ class LoginForm(forms.ModelForm):
         fields = ['email','password']
 
 class UserCreate(forms.ModelForm):
-    role = forms.ModelChoiceField(queryset=Group.objects.all())
-    # password = forms.CharField(max_length=50)
+    role = forms.ChoiceField(choices=Role.choices())
     class Meta:
         model = User
         fields = ['username','email','role']
 
-    def clean(self):
-        '''clean method for email'''
-        super().clean()
+    # def clean(self):
+    #     '''clean method for email'''
+    #     super().clean()
 
     def save(self, commit=False):
         print("dafasudsaydfsaygdfisuadfsagfsafysfuiosdgfsdukgio")

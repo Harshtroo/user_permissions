@@ -1,22 +1,37 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <a href="{% url 'login' %}">
-        <button type="login">Login</button></a>
-
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'login' %}">
+            <button type="login" disabled >Login</button></a>
+        {%else%}
+            <a href="{% url 'login' %}">
+            <button type="login">Login</button></a>
+        {% endif %}
+                
         {% if request.user.is_authenticated and request.user.role == 'Admin' %}
             <a href="{% url 'create_user' %}">
             <button type="register" >Register</button></a>
         {% else %}
-        <a href="{% url 'create_user' %}">
+            <a href="{% url 'create_user' %}">
             <button type="register" disabled>Register</button></a>
         {% endif %}
+                
         <a href="{% url 'user_list' %}">
         <button type="user list">User List</button></a>
         
         <a href="{% url 'add_items' %}">
-            <button type="user list">Add Items</button></a>
-        <a href="{% url 'items_list' %}">
-            <button type="user list">Items List</button></a>
+            <button type="add item">Add Items</button></a>
+        
+            <a href="{% url 'items_list' %}">
+            <button type="item list">Items List</button></a>
+        
+        <a class="navbar-brand" href="{% url 'logout' %}">
+            <button type="logout">Logout</button></a>
+        
+        
+        {% if request.user.is_authenticated %}
+        {{user.email}}
+        {% endif %}
     </body>
 </html>

@@ -28,17 +28,35 @@
                 <td>{{user_field.id}}</td>
                 <td>{{user_field.username}}</td>
                 <td>{{user_field.email}}</td>
-                <td>{% if user_field.role == 'A' %}Admin{% elif user_field.role == 'S' %}Supervisor{% endif %}</td>
+                <td>{{user_field.role}}</td>
                 <td>
+                {% if request.user.role  == 'Admin' %}
+                    <form method="GET" action="/user_edit/{{user_field.pk}}">
+                            <!-- {% csrf_token %} -->
+                            <button type="edit">Edit</button>
+                    </form></td>
+
+                    <td>    
+                        <form method="POST" action="/user_delete/{{user_field.pk}}">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                        </form></td>
+
+                {% else%}
                 <form method="GET" action="/user_edit/{{user_field.pk}}">
-                        <!-- {% csrf_token %} -->
-                        <button type="edit">Edit</button>
+                    <!-- {% csrf_token %} -->
+                    <button type="edit" disabled>Edit</button>
                 </form></td>
+
                 <td>    
                     <form method="POST" action="/user_delete/{{user_field.pk}}">
                             {% csrf_token %}
-                            <button type="submit">Delete</button>
+                            <button type="submit" disabled>Delete</button>
                     </form></td>
+
+                {% endif %}
+
+                
         {% endfor %}
         
     </body>

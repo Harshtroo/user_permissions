@@ -8,43 +8,49 @@ from django.contrib import messages
 from django.urls import reverse,reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
+
 class Home(TemplateView):
     template_name = 'home.html'
 
 class Login(LoginView):
     '''login class '''
     template_name = 'login.html'
-    success_url ='/'
+    # success_url ='user_list'
     success_message = "Thing was deleted successfully."
+
+class Logout(LogoutView):
+    '''logout class'''
+    pass
 
 class CreateUser(LoginRequiredMixin,CreateView):
     # model = User
     form_class = UserCreate
     template_name = 'register.html'
-    # success_url = 'user_list'
+    # success_url = reverse_lazy('user_list')
 
     def post(self, request, *args, **kwargs):
         '''create employee post request'''
-        return super().post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        # print("vnjfbvfvbb")
-        ''' create employee form valid or not.'''
-        form.save()
-        messages.success(request=self.request, message="successfully create")
-        super().form_valid(form)
-        return super().form_valid(form)
-        # return redirect('user_list')
-
-    def get_success_url(self):
-        ''''creae employee form and redirect url'''
-        return reverse_lazy('user_list')
+        user_form = self.form_class(request.POST or None)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            group = Group.objects.filter(name = user.role)
+            user.save()
+            if group:
+                group = group.first()
+                user.groups.add(group.id)
+        return redirect(reverse_lazy('user_list'))
 
 class UserList(LoginRequiredMixin,ListView):
+    login_url = 'login'
     template_name = 'user_list.html'
     model = User
     queryset = User.objects.filter(is_deleted = False)
     context_object_name = 'user'
+
+    def post(self,request,*args,**kwargs):
+        messages.error(request=self.request, message="You are not authoricesd.")
+        return super().post(request, *args, **kwargs)
 
 class UserEdit(UpdateView):
     template_name ='user_edit.html'
@@ -71,6 +77,7 @@ class UserDelete(DeleteView):
         return HttpResponseRedirect(self.success_url)
 
 class AddItems(LoginRequiredMixin,CreateView):
+    login_url = 'login'
     # model = Manufacturer
     template_name = 'add_items.html'
     form_class = CreateItems
@@ -81,6 +88,7 @@ class AddItems(LoginRequiredMixin,CreateView):
     #     return super().post(request, *args, **kwargs)
 
 class ItemsList(LoginRequiredMixin,ListView):
+    login_url = 'login'
     model = Manufacturer
     template_name = 'items_list.html'
     context_object_name = 'items'

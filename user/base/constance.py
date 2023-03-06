@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class Role(Enum):
-    A = 'Admin'
-    S = 'Supervisor'
+    Admin = 'Admin'
+    Supervisor = 'Supervisor'
     M = 'Manager'
 
 
