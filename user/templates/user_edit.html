@@ -1,3 +1,5 @@
+{% include 'base.html' %}
+
 <!DOCTYPE html>
 <html>
     <body class="container">
@@ -11,7 +13,7 @@
                     {% endfor %}
             </ul>
         {% endif %}
-        <form method="POST">
+        <form method="post">
             {% csrf_token %}
             {% comment %} <h3> User Form</h3> {% endcomment %}
             {{ form.as_p}}

@@ -4,7 +4,7 @@ from enum import Enum
 class Role(Enum):
     Admin = 'Admin'
     Supervisor = 'Supervisor'
-    M = 'Manager'
+    Manager = 'Manager'
 
 
     @classmethod

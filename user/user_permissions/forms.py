@@ -19,10 +19,6 @@ class UserCreate(forms.ModelForm):
         model = User
         fields = ['username','email','role']
 
-    # def clean(self):
-    #     '''clean method for email'''
-    #     super().clean()
-
     def save(self, commit=False):
         print("dafasudsaydfsaygdfisuadfsagfsafysfuiosdgfsdukgio")
         instance = super().save(commit=True)
@@ -32,8 +28,9 @@ class UserCreate(forms.ModelForm):
         return instance
 
 class EditUser(forms.ModelForm):
+    role = forms.ChoiceField(choices=Role.choices())
     class Meta:
-        model =User
+        model = User
         fields = ['username','email','role']
 
 class CreateItems(forms.ModelForm):

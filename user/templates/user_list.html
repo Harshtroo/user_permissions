@@ -1,3 +1,4 @@
+{% include 'base.html' %}
 <html>
     <body>        
         <table class="table" align="center" border="1">
@@ -30,32 +31,16 @@
                 <td>{{user_field.email}}</td>
                 <td>{{user_field.role}}</td>
                 <td>
-                {% if request.user.role  == 'Admin' %}
-                    <form method="GET" action="/user_edit/{{user_field.pk}}">
-                            <!-- {% csrf_token %} -->
-                            <button type="edit">Edit</button>
-                    </form></td>
-
-                    <td>    
-                        <form method="POST" action="/user_delete/{{user_field.pk}}">
-                                {% csrf_token %}
-                                <button type="submit">Delete</button>
-                        </form></td>
-
-                {% else%}
-                <form method="GET" action="/user_edit/{{user_field.pk}}">
-                    <!-- {% csrf_token %} -->
-                    <button type="edit" disabled>Edit</button>
+                <form method="GET" action="{% url 'user_edit' user_field.pk %}">
+                        <!-- {% csrf_token %} -->
+                        <button type="edit">Edit</button>
                 </form></td>
 
                 <td>    
                     <form method="POST" action="/user_delete/{{user_field.pk}}">
                             {% csrf_token %}
-                            <button type="submit" disabled>Delete</button>
+                            <button type="submit">Delete</button>
                     </form></td>
-
-                {% endif %}
-
                 
         {% endfor %}
         
