@@ -52,8 +52,10 @@ class UserList(MyCustomPermissions, ListView):
     template_name = 'user_list.html'
     model = User
     queryset = User.objects.filter(is_deleted = False)
-    context_object_name = 'user'
-    permission_required = ('user_permissions.view_user', 'user_permissions.change_user')
+    permission_required = {
+        "GET": ["user_permissions.view_user"],
+    }
+    # permission_required = ('user_permissions.view_user', 'user_permissions.change_user')
 
     def post(self,request,*args,**kwargs):
         messages.error(request=self.request, message="You are not authoricesd.")
@@ -64,8 +66,12 @@ class UserEdit(MyCustomPermissions, UpdateView):
     form_class = EditUser
     # model = User
     success_url = reverse_lazy('user_list')
-    permission_required = ('user_permissions.view_user',)
-
+    # permission_required = ('user_permissions.view_user','user_permissions.change_user',)
+    permission_required = {
+        "GET": ["user_permissions.change_user"],
+        "POST":["user_permissions.change_user"]
+    }
+    
     def get_queryset(self):
         return User.objects.all()
 
@@ -76,32 +82,44 @@ class UserEdit(MyCustomPermissions, UpdateView):
             group = group.first()
             user.groups.clear()
             user.groups.add(group.id)
+        messages.success(request=self.request, message="Successfully updated.")
         return super(UserEdit, self).form_valid(form)
 
-class UserDelete(DeleteView):
+    def handle_no_permission(self):
+        # add custom message
+        messages.error(self.request, 'You have no permission')
+        return redirect('user_list')
+
+
+class UserDelete(MyCustomPermissions,DeleteView):
     model = User
     template_name = 'user_delete.html'
     success_url = reverse_lazy('user_list')
+    # permission_required = ('user_permissions.delete_user',)
+    permission_required = {
+        "GET": ["user_permissions.delete_user"],
+        "POST":["user_permissions.delete_user"]
+        # "DELETE":["user_permissions.delete_user"]
+    }
 
     def post(self, request, *args, **kwargs):
         ''''employee delete post method'''
         user_details = User.objects.get(id=kwargs['pk'])
-        print(user_details)
         user_details.is_deleted = True
         user_details.save()
         messages.success(request=self.request, message="successfully Deleted.")
         return HttpResponseRedirect(self.success_url)
 
+    def handle_no_permission(self):
+        # add custom message
+        messages.error(self.request, 'You have no permission')
+        return redirect('user_list')
+
 class AddItems(LoginRequiredMixin,CreateView):
     login_url = 'login'
-    # model = Manufacturer
     template_name = 'add_items.html'
     form_class = CreateItems
     success_url = '/'
-
-    # def post(self, request, *args, **kwargs):
-    #     '''create employee post request'''
-    #     return super().post(request, *args, **kwargs)
 
 class ItemsList(LoginRequiredMixin,ListView):
     login_url = 'login'

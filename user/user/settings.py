@@ -126,3 +126,4 @@ AUTH_USER_MODEL  = 'user_permissions.User'
 
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
+# APPEND_SLASH = False

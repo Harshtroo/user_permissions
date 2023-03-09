@@ -37,7 +37,7 @@
                 </form></td>
 
                 <td>    
-                    <form method="POST" action="/user_delete/{{user_field.pk}}">
+                    <form method="POST" action="/user_delete/{{user_field.pk}}/">
                             {% csrf_token %}
                             <button type="submit">Delete</button>
                     </form></td>
